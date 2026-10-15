@@ -47,7 +47,7 @@ export const getTasks = function() {
 
 const updateActors = function() {
   const tempActors = [];
-  const sourceTasks = tasks.length > 0 ? tasks : rawTasks;
+  const sourceTasks = [...tasks, ...rawTasks];
   sourceTasks.forEach(task => {
     if (task.people) {
       tempActors.push(...task.people);
