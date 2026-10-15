@@ -88,13 +88,17 @@ describe('when using the journeyDb', function() {
       expect(journeyDb.getSections()).toEqual(['Journey to the shops', 'Do shopping']);
     });
 
-    it('is idempotent when getTasks is called multiple times and resolves actors before getTasks', function() {
+    it('is idempotent when getTasks is called multiple times and resolves actors before and after getTasks', function() {
       journeyDb.addSection('Onboarding');
       journeyDb.addTask('Sign up', '10: Alice, Bob, ');
       expect(journeyDb.getActors()).toEqual(['Alice', 'Bob']);
       expect(journeyDb.getTasks()).toHaveLength(1);
       expect(journeyDb.getTasks()).toHaveLength(1);
       expect(journeyDb.getTasks()[0].score).toEqual(10);
+
+      journeyDb.addTask('Verify email', '8: Charlie');
+      expect(journeyDb.getActors()).toEqual(['Alice', 'Bob', 'Charlie']);
+      expect(journeyDb.getTasks()).toHaveLength(2);
     });
   });
 });
