@@ -39,6 +39,7 @@ export const getTasks = function() {
     iterationCount++;
   }
 
+  tasks.length = 0;
   tasks.push(...rawTasks);
 
   return tasks;
@@ -46,7 +47,8 @@ export const getTasks = function() {
 
 const updateActors = function() {
   const tempActors = [];
-  tasks.forEach(task => {
+  const sourceTasks = tasks.length > 0 ? tasks : rawTasks;
+  sourceTasks.forEach(task => {
     if (task.people) {
       tempActors.push(...task.people);
     }
@@ -57,7 +59,8 @@ const updateActors = function() {
 };
 
 export const addTask = function(descr, taskData) {
-  const pieces = taskData.substr(1).split(':');
+  const normalizedData = taskData.startsWith(':') ? taskData.substr(1) : taskData;
+  const pieces = normalizedData.split(':');
 
   let score = 0;
   let peeps = [];
@@ -68,7 +71,7 @@ export const addTask = function(descr, taskData) {
     score = Number(pieces[0]);
     peeps = pieces[1].split(',');
   }
-  const peopleList = peeps.map(s => s.trim());
+  const peopleList = peeps.map(s => s.trim()).filter(Boolean);
 
   const rawTask = {
     section: currentSection,
