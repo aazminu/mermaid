@@ -110,8 +110,8 @@ export const drawCircle = function(element, circleData) {
   circleElement.attr('stroke', circleData.stroke);
   circleElement.attr('r', circleData.r);
 
-  if (typeof circleElement.class !== 'undefined') {
-    circleElement.attr('class', circleElement.class);
+  if (typeof circleData.class !== 'undefined') {
+    circleElement.attr('class', circleData.class);
   }
 
   if (typeof circleData.title !== 'undefined') {
@@ -135,8 +135,9 @@ export const drawText = function(elem, textData) {
     textElem.attr('class', textData.class);
   }
 
+  const textMargin = Number(textData.textMargin) || 0;
   const span = textElem.append('tspan');
-  span.attr('x', textData.x + textData.textMargin * 2);
+  span.attr('x', textData.x + textMargin * 2);
   span.text(nText);
 
   return textElem;
@@ -316,11 +317,12 @@ export const getNoteRect = function() {
 };
 
 const _drawTextCandidateFunc = (function() {
-  function byText(content, g, x, y, width, height, textAttrs, colour) {
+  function byText(content, g, x, y, width, height, textAttrs, conf, colour) {
     const text = g
       .append('text')
       .attr('x', x + width / 2)
       .attr('y', y + height / 2 + 5)
+      .attr('fill', colour)
       .style('font-color', colour)
       .style('text-anchor', 'middle')
       .text(content);
@@ -380,7 +382,7 @@ const _drawTextCandidateFunc = (function() {
       .style('color', colour)
       .text(content);
 
-    byTspan(content, body, x, y, width, height, textAttrs, conf);
+    byTspan(content, body, x, y, width, height, textAttrs, conf, colour);
     _setTextAttrs(text, textAttrs);
   }
 
